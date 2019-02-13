@@ -7,5 +7,15 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
-
+    <style name="AppTheme.Blue" parent="Theme.AppCompat.Dialog">
+        <item name="colorAccent">@color/theme_blue</item>
+    </style>
+    <!--APP的Theme-->
+    <style name="MyTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/yin_he</item>
+        <item name="colorPrimaryDark">@color/yin_he</item>
+        <item name="colorAccent">@color/yin_he</item>
+        <!--<item name="android:typeface">monospace</item>-->
+    </style>
 </resources>
