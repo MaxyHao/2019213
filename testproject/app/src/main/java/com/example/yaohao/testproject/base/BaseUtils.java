@@ -2,11 +2,12 @@ package com.example.yaohao.testproject.base;
 
 import android.util.Log;
 
+import com.example.yaohao.testproject.retrofit.ApiClient;
+import com.example.yaohao.testproject.retrofit.ApiStores;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import eiyudensetsu.ginga.youxin.com.yinheyingxiong.retrofit.ApiClient;
-import eiyudensetsu.ginga.youxin.com.yinheyingxiong.retrofit.ApiStores;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;

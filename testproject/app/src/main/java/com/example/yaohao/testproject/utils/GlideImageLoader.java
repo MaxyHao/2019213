@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.example.yaohao.testproject.R;
 import com.lzy.imagepicker.loader.ImageLoader;
 
 import java.io.File;
@@ -20,8 +21,8 @@ public class GlideImageLoader implements ImageLoader {
 	public void displayImage(Activity activity, String path, ImageView imageView, int width, int height) {
 		Glide.with(activity)//
 				.load(Uri.fromFile(new File(path)))//
-//				.placeholder(R.drawable.zanwushuju)//
-//				.error(R.drawable.zanwushuju)//
+				.placeholder(R.drawable.zanwushuju)//
+				.error(R.drawable.zanwushuju)//
 				.into(imageView);
 	}
 
@@ -29,8 +30,8 @@ public class GlideImageLoader implements ImageLoader {
 	public void displayImagePreview(Activity activity, String path, ImageView imageView, int width, int height) {
 		Glide.with(activity)//
 				.load(Uri.fromFile(new File(path)))//
-//				.placeholder(R.drawable.zanwushuju)//
-//				.error(R.drawable.zanwushuju)//
+				.placeholder(R.drawable.zanwushuju)//
+				.error(R.drawable.zanwushuju)//
 				.into(imageView);
 	}
 

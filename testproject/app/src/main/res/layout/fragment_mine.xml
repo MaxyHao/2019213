@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fitsSystemWindows="true"
+    android:background="@color/theme_blue"
+    android:orientation="vertical">
+    <!--<android.support.design.widget.AppBarLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:background="@color/colorPrimary"-->
+        <!--android:paddingTop="10dp"-->
+        <!--android:fitsSystemWindows="true">-->
+        <!--<com.example.yaohao.testproject.widget.EnjoyshopToolBar-->
+            <!--android:id="@+id/toolbar"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:background="@color/colorPrimary"-->
+            <!--android:minHeight="?attr/actionBarSize"-->
+            <!--app:isShowSearchView="false"-->
+            <!--app:title="我的"-->
+            <!--&gt;</com.example.yaohao.testproject.widget.EnjoyshopToolBar>-->
+    <!--</android.support.design.widget.AppBarLayout>-->
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/mine_smartrefresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="20dp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="我的"
+                android:gravity="center"/>
+        </LinearLayout>
+
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+</LinearLayout>

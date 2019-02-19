@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:fitsSystemWindows="true"
+        android:paddingTop="@dimen/dp20">
+
+        <com.example.yaohao.testproject.widget.EnjoyshopToolBar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:minHeight="?attr/actionBarSize"
+            app:isShowSearchView="true"
+            app:title="a大帅"></com.example.yaohao.testproject.widget.EnjoyshopToolBar>
+        <!--android:minHeight="?attr/actionBarSize"-->
+    </android.support.design.widget.AppBarLayout>
+
+    <FrameLayout
+        android:id="@+id/carlist_top_viewgroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></FrameLayout>
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/oldcar_Refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/dp3">
+
+        <com.example.yaohao.testproject.widget.ScrollViewTopXuanFuForListView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="2000dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"></LinearLayout>
+
+                <FrameLayout
+                    android:id="@+id/carlist_scrollView_viewgroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:id="@+id/carlist_move_option_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp45"
+                        android:background="@color/ghostwhite"
+                        android:orientation="horizontal">
+
+                        <CheckBox
+                            android:id="@+id/cb_morenpaixu"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/dp50"
+                            android:layout_weight="1.3"
+                            android:button="@null"
+                            android:gravity="center"
+                            android:text="默认排序"
+                            android:textColor="@drawable/carlist_option_selelcted_textcolor"  />
+
+                        <CheckBox
+                            android:id="@+id/cb_pinpai"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/dp50"
+                            android:layout_weight="1"
+                            android:button="@null"
+                            android:gravity="center"
+                            android:text="品牌"
+                            android:textColor="@drawable/carlist_option_selelcted_textcolor"  />
+
+                        <CheckBox
+                            android:id="@+id/cb_shoufu"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/dp50"
+                            android:layout_weight="1"
+                            android:button="@null"
+                            android:gravity="center"
+                            android:text="首付"
+                            android:textColor="@drawable/carlist_option_selelcted_textcolor"  />
+
+                        <CheckBox
+                            android:id="@+id/cb_yuegong"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/dp50"
+                            android:layout_weight="1"
+                            android:button="@null"
+                            android:gravity="center"
+                            android:text="月供"
+                            android:textColor="@drawable/carlist_option_selelcted_textcolor" />
+
+                        <CheckBox
+                            android:id="@+id/cb_shaixuan"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/dp50"
+                            android:layout_weight="1.2"
+                            android:button="@null"
+                            android:gravity="center"
+                            android:text="筛选"
+                            android:textColor="@drawable/carlist_option_selelcted_textcolor" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:background="@color/lightgray" />
+                </FrameLayout>
+
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/oldcar_listview"
+                        android:layout_width="match_parent"
+                        android:layout_height="1000dp"
+                        android:visibility="visible" />
+
+                    <!--<TextView-->
+                    <!--android:id="@+id/SSMX_ZanWu"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="53dp"-->
+                    <!--android:layout_marginTop="@dimen/dp22"-->
+                    <!--android:background="@color/item_bg"-->
+                    <!--android:gravity="center"-->
+                    <!--android:text="@string/JFMingXi_ZanWu"-->
+                    <!--android:textColor="@color/feiShaHomeTitle"-->
+                    <!--android:textSize="14sp" />-->
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="500dp"></LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="500dp"></LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="500dp"></LinearLayout>
+            </LinearLayout>
+
+
+        </com.example.yaohao.testproject.widget.ScrollViewTopXuanFuForListView>
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+
+</LinearLayout>

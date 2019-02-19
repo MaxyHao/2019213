@@ -1,5 +1,6 @@
 package com.example.yaohao.testproject.base;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
@@ -10,7 +11,6 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
 import android.util.Log;
@@ -57,8 +57,7 @@ public class BaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String currentActivity = getClass().getSimpleName();
-        if (currentActivity.contains("SplashActivity"))
-        {
+        if (currentActivity.contains("SplashActivity")) {
             requestWindowFeature(Window.FEATURE_NO_TITLE);
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
@@ -92,7 +91,6 @@ public class BaseActivity extends AppCompatActivity {
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
             window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-
             //给状态栏设置颜色。我设置透明。
             window.setStatusBarColor(Color.TRANSPARENT);
             window.setNavigationBarColor(Color.TRANSPARENT);
@@ -134,6 +132,7 @@ public class BaseActivity extends AppCompatActivity {
             progressDialog.show();
         }
     }
+
 
     public void dialogShow() {
         dialogShow("加载中...");
@@ -180,20 +179,20 @@ public class BaseActivity extends AppCompatActivity {
         }
         super.onResume();
 
-        String currentActivity = getClass().getSimpleName();
-        if (!currentActivity.contains("SplashActivity")
-                && !currentActivity.contains("LoginActivity")
-                && !currentActivity.contains("ForgetPasswordActivity")
-                && !currentActivity.contains("ModifyPasswordActivity"))
-        {
-            //除了splash界面和登录界面，其他界面未登录时都finish掉
-            String token = SPUtils.getInstance().getString("token");
-            if (TextUtils.isEmpty(token))
-            {
-                LogUtils.i("未登录，finish界面");
-                finish();
-            }
-        }
+//        String currentActivity = getClass().getSimpleName();
+//        if (!currentActivity.contains("SplashActivity")
+//                && !currentActivity.contains("LoginActivity")
+//                && !currentActivity.contains("ForgetPasswordActivity")
+//                && !currentActivity.contains("ModifyPasswordActivity"))
+//        {
+//            //除了splash界面和登录界面，其他界面未登录时都finish掉
+//            String token = SPUtils.getInstance().getString("token");
+//            if (TextUtils.isEmpty(token))
+//            {
+//                LogUtils.i("未登录，finish界面");
+//                finish();
+//            }
+//        }
     }
 
 

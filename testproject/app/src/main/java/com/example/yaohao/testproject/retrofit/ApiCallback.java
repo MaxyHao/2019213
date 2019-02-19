@@ -3,7 +3,8 @@ package com.example.yaohao.testproject.retrofit;
 
 import android.util.Log;
 
-import eiyudensetsu.ginga.youxin.com.yinheyingxiong.utils.LogUtils;
+import com.example.yaohao.testproject.utils.LogUtils;
+
 import io.reactivex.observers.DisposableObserver;
 import retrofit2.HttpException;
 

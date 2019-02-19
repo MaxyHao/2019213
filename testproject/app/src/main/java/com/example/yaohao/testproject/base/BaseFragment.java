@@ -9,12 +9,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
-import eiyudensetsu.ginga.youxin.com.yinheyingxiong.common.MyApp;
-import eiyudensetsu.ginga.youxin.com.yinheyingxiong.dialog.ProgressDialog;
-import eiyudensetsu.ginga.youxin.com.yinheyingxiong.utils.LogUtils;
-import eiyudensetsu.ginga.youxin.com.yinheyingxiong.utils.NetUtils;
-import eiyudensetsu.ginga.youxin.com.yinheyingxiong.utils.SystemDialogUtils;
-import eiyudensetsu.ginga.youxin.com.yinheyingxiong.utils.ToastUtils;
+import com.example.yaohao.testproject.MyApplication;
+import com.example.yaohao.testproject.dialog.ProgressDialog;
+import com.example.yaohao.testproject.utils.LogUtils;
+import com.example.yaohao.testproject.utils.NetUtils;
+import com.example.yaohao.testproject.utils.SystemDialogUtils;
+import com.example.yaohao.testproject.utils.ToastUtils;
+
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableObserver;
 
@@ -26,14 +27,14 @@ import io.reactivex.observers.DisposableObserver;
 public class BaseFragment extends Fragment {
 
     public Context mContext;
-    public MyApp myApp;
+    public MyApplication myApp;
     public ProgressDialog progressDialog;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         mContext = context;
-        myApp = MyApp.getInstance();
+        myApp = MyApplication.getInstance();
 		progressDialog = new ProgressDialog(getContext());
 	}
 
