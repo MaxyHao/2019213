@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -18,8 +19,11 @@ import android.widget.TextView;
 
 import com.example.yaohao.testproject.R;
 import com.example.yaohao.testproject.bean.ScrollViewTopEvent;
+import com.example.yaohao.testproject.mvp.login.LoginActivity;
+import com.example.yaohao.testproject.mvp.pinpailist.PinPaiListActivity;
 import com.example.yaohao.testproject.retrofit.RxBus;
 import com.example.yaohao.testproject.utils.DeviceUtils;
+import com.example.yaohao.testproject.utils.MoveUtils;
 
 import java.util.List;
 
@@ -28,6 +32,7 @@ import java.util.List;
  * Created by dongjunkun on 2015/6/17.
  */
 public class DropDownMenu extends LinearLayout {
+    private  Context mContext;
     //下划线
     private  View underLine;
     //顶部菜单布局
@@ -68,7 +73,7 @@ public class DropDownMenu extends LinearLayout {
 
     public DropDownMenu(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-
+        mContext=context;
         setOrientation(VERTICAL);
 
         //为DropDownMenu添加自定义属性
@@ -167,7 +172,6 @@ public class DropDownMenu extends LinearLayout {
             @Override
             public void onClick(View v) {
                 RxBus.get().post(new ScrollViewTopEvent(1,true));
-
                 switchMenu(tab);
 
             }
@@ -255,7 +259,10 @@ public class DropDownMenu extends LinearLayout {
     private void switchMenu(View target) {
         System.out.println(current_tab_position);
         for (int i = 0; i < tabMenuView.getChildCount(); i = i + 1) {
-            if (target == tabMenuView.getChildAt(i)) {
+            if (target==tabMenuView.getChildAt(1)&&i==1){
+                MoveUtils.go(mContext, PinPaiListActivity.class);
+                closeMenu();
+            }else  if (target == tabMenuView.getChildAt(i)) {
                 if (current_tab_position == i) {
                     closeMenu();
                 } else {

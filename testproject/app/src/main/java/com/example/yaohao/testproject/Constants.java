@@ -20,8 +20,8 @@ public final class Constants {
     /**
      * 系统初始化配置文件名
      */
-    public static final String SYSTEM_INIT_FILE_NAME = "yh.android.sysini";
-    public static final String FLAG = "com.yh.android";
+    public static final String SYSTEM_INIT_FILE_NAME = "x3.android.sysini";
+    public static final String FLAG = "com.x3.android";
 
 
     /**
@@ -47,7 +47,7 @@ public final class Constants {
     /**
      * 图片名称
      */
-    public static final String PHOTO_PATH = "handongkeji_android_photo";
+    public static final String PHOTO_PATH = "x3_android_photo";
     /**
      * 语音缓存目录
      */
@@ -84,7 +84,7 @@ public final class Constants {
     /**
      * 数据库名
      */
-    public static final String DB_NAME = "android.db";
+    public static final String DB_NAME = "x3.db";
 
     //图片服务器地址
 //    public static final String URL_IMAGE = "http://www.hhhxin.com/";

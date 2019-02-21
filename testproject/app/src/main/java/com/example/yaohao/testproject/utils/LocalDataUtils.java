@@ -1,8 +1,10 @@
 package com.example.yaohao.testproject.utils;
 
+import com.example.yaohao.testproject.R;
 import com.example.yaohao.testproject.bean.MorenPaiXuEntity;
 import com.example.yaohao.testproject.bean.ShouFuEntity;
 import com.example.yaohao.testproject.bean.YueGongEntity;
+import com.example.yaohao.testproject.mvp.pinpailist.PinPaiEntity;
 
 import java.util.ArrayList;
 
@@ -46,6 +48,19 @@ public class LocalDataUtils {
         list.add(new YueGongEntity(4, "3000-4000元", false));
         list.add(new YueGongEntity(5, "4000-5000元", false));
         list.add(new YueGongEntity(6, "5000以上", false));
+        return list;
+    }
+
+
+    //查询月供范围
+    public static ArrayList<PinPaiEntity> getPinPaiList() {
+        ArrayList<PinPaiEntity> list = new ArrayList<PinPaiEntity>();
+        list.add(new PinPaiEntity(1, "不限品牌", R.mipmap.pp_bmw));
+        list.add(new PinPaiEntity(2, "宝马", R.mipmap.pp_bmw));
+        list.add(new PinPaiEntity(3, "奔驰", R.mipmap.pp_bmw));
+        list.add(new PinPaiEntity(4, "雪佛兰", R.mipmap.pp_bmw));
+        list.add(new PinPaiEntity(5, "玛莎拉蒂", R.mipmap.pp_bmw));
+        list.add(new PinPaiEntity(6, "奇瑞", R.mipmap.pp_bmw));
         return list;
     }
 }

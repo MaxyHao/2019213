@@ -1,8 +1,9 @@
 package com.example.yaohao.testproject.mvp.shop;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -10,22 +11,28 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.yaohao.testproject.R;
-import com.example.yaohao.testproject.adapter.ConstellationAdapter;
 import com.example.yaohao.testproject.adapter.GirdDropDownAdapter;
-import com.example.yaohao.testproject.adapter.ListDropDownAdapter;
+import com.example.yaohao.testproject.adapter.ListShouFuDropDownAdapter;
+import com.example.yaohao.testproject.adapter.ListYueGongDropDownAdapter;
+import com.example.yaohao.testproject.bean.MorenPaiXuEntity;
 import com.example.yaohao.testproject.bean.ScrollViewTopEvent;
+import com.example.yaohao.testproject.bean.ShouFuEntity;
+import com.example.yaohao.testproject.bean.YueGongEntity;
 import com.example.yaohao.testproject.mvp.base.BasePresenter;
 import com.example.yaohao.testproject.mvp.base.MvpFragment;
 import com.example.yaohao.testproject.retrofit.RxBus;
+import com.example.yaohao.testproject.utils.DensityUtils;
+import com.example.yaohao.testproject.utils.LocalDataUtils;
 import com.example.yaohao.testproject.widget.DropDownMenu;
 import com.example.yaohao.testproject.widget.ScrollViewTopXuanFuForListView;
+
+import org.apmem.tools.layouts.FlowLayout;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,172 +48,213 @@ import io.reactivex.functions.Function;
  * Created by yaohao on 2019/2/14.
  */
 
-public class ShopFragment extends MvpFragment  implements ScrollViewTopXuanFuForListView.OnScrollToBottomListener{
+public class ShopFragment extends MvpFragment implements ScrollViewTopXuanFuForListView.OnScrollToBottomListener {
 
+    private static final String TAG_SHOUFU = "2";
+    private static final String TAG_YUEGONG = "3";
     @InjectView(R.id.dropDownMenu)
     DropDownMenu mDropDownMenu;
-    private String headers[] = {"默认排序", "品牌", "首付", "月供","筛选"};
+    private String headers[] = {"默认排序", "品牌", "首付", "月供"};
     private List<View> popupViews = new ArrayList<>();
 
-    private GirdDropDownAdapter cityAdapter;
-    private ListDropDownAdapter ageAdapter;
-    private ListDropDownAdapter sexAdapter;
-    private ConstellationAdapter constellationAdapter;
+    private GirdDropDownAdapter moRenPaixuAdapter;
+    private ListShouFuDropDownAdapter shoufuAdapter;
+    private ListYueGongDropDownAdapter yuegongAdapter;
 
-    private String citys[] = {"不限", "武汉", "北京", "上海", "成都", "广州", "深圳", "重庆", "天津", "西安", "南京", "杭州"};
-    private String ages[] = {"不限", "18岁以下", "18-22岁", "23-26岁", "27-35岁", "35岁以上"};
-    private String sexs[] = {"不限", "男", "女"};
-    private String constellations[] = {"不限", "白羊座", "金牛座", "双子座", "巨蟹座", "狮子座", "处女座", "天秤座", "天蝎座", "射手座", "摩羯座", "水瓶座", "双鱼座"};
 
-    private int constellationPosition = 0;
     @InjectView(R.id.scrollView_shop)
     ScrollViewTopXuanFuForListView scrollView;
-    //悬浮顶部容器
-//    @InjectView(R.id.carlist_scrollView_viewgroup)
-//    FrameLayout carlist_scrollView_viewgroup;
+
     private boolean isvisiable;
     @InjectView(R.id.carlist_top_viewgroup)
     LinearLayout carlist_top_viewgroup;
-    private ListDropDownAdapter sexsAdapter;
+    private ArrayList<MorenPaiXuEntity> mMorenpaixu;
+    @InjectView(R.id.carlist_move_viewgroup)
+    LinearLayout carlist_move_viewgroup;
+    private ArrayList<ShouFuEntity> mShoufu;
+    private ArrayList<YueGongEntity> mYueGong;
+    //tab下条件选择显示容器
+    @InjectView(R.id.option_viewGroup)
+    FlowLayout mOption_Viewgroup;
 
     @Override
     protected BasePresenter createPresenter() {
         return null;
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.fragment_shop,null);
+        View view = inflater.inflate(R.layout.fragment_shop, null);
         ButterKnife.inject(this, view);
-        mContext=getActivity();
-        initView();
+        mContext = getActivity();
         initData();
+        initView();
         initRxBus();
         scrollView.setOnScrollToBottomLintener(this);
+        mOption_Viewgroup.setVisibility(View.GONE);
         return view;
     }
 
     private void initData() {
+        mMorenpaixu = LocalDataUtils.getMoRenPaiXuList();
+        mShoufu = LocalDataUtils.getShouFuList();
+        mYueGong = LocalDataUtils.getYueGongList();
     }
 
     private void initView() {
         //init city menu
-        final ListView cityView = new ListView(mContext);
-        cityAdapter = new GirdDropDownAdapter(mContext, Arrays.asList(citys));
-        cityView.setDividerHeight(0);
-        cityView.setAdapter(cityAdapter);
-        //init age menu
-        final ListView ageView = new ListView(mContext);
-        ageView.setDividerHeight(0);
-        ageAdapter = new ListDropDownAdapter(mContext, Arrays.asList(ages));
-        ageView.setAdapter(ageAdapter);
-        //init sex menu
-        final ListView sexView = new ListView(mContext);
-        sexView.setDividerHeight(0);
-        sexAdapter = new ListDropDownAdapter(mContext, Arrays.asList(sexs));
-        sexView.setAdapter(sexAdapter);
+        final ListView moRenPaiXuView = new ListView(mContext);
+        moRenPaixuAdapter = new GirdDropDownAdapter(mContext, mMorenpaixu);
+        moRenPaiXuView.setDividerHeight(0);
+        moRenPaiXuView.setDivider(new ColorDrawable(Color.WHITE));
+        moRenPaiXuView.setAdapter(moRenPaixuAdapter);
+        //init 品牌menu
+        final TextView pinpai = new TextView(mContext);
+        //init 首付 menu
+        final GridView shoufuViews = new GridView(mContext);
+        shoufuViews.setNumColumns(3);
+        shoufuAdapter = new ListShouFuDropDownAdapter(mContext, mShoufu);
+        shoufuViews.setBackgroundResource(R.color.white);
+        shoufuViews.setAdapter(shoufuAdapter);
+        //init 月供 menu
+        final GridView yueGongViews = new GridView(mContext);
+        yueGongViews.setNumColumns(3);
+        yueGongViews.setBackgroundResource(R.color.white);
+        yuegongAdapter = new ListYueGongDropDownAdapter(mContext, mYueGong);
+        yueGongViews.setAdapter(yuegongAdapter);
+        //init popupViews
+        popupViews.add(moRenPaiXuView);
+        popupViews.add(pinpai);
+        popupViews.add(shoufuViews);
+        popupViews.add(yueGongViews);
 
-        //init sex menu
-        final ListView sexsView = new ListView(mContext);
-        sexsView.setDividerHeight(0);
-        sexsAdapter = new ListDropDownAdapter(mContext, Arrays.asList(sexs));
-        sexsView.setAdapter(sexsAdapter);
-        //init constellation
-        final View constellationView = getLayoutInflater().inflate(R.layout.drop_custom_layout, null);
-        GridView constellation = ButterKnife.findById(constellationView, R.id.constellation);
-        constellationAdapter = new ConstellationAdapter(mContext, Arrays.asList(constellations));
-        constellation.setAdapter(constellationAdapter);
-        TextView ok = ButterKnife.findById(constellationView, R.id.ok);
-        ok.setOnClickListener(new View.OnClickListener() {
+        //add item click event
+        moRenPaiXuView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                moRenPaixuAdapter.setCheckItem(position);
+                mDropDownMenu.setTabText(position == 0 ? headers[0] : mMorenpaixu.get(position).getTitle());
+                mDropDownMenu.closeMenu();
+            }
+        });
+
+        shoufuViews.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                shoufuAdapter.setCheckItem(position);
+                mOption_Viewgroup.setVisibility(View.VISIBLE);
+                addOptionView(mShoufu.get(position).getTitle(), "2");
+                mDropDownMenu.closeMenu();
+            }
+        });
+
+        yueGongViews.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                yuegongAdapter.setCheckItem(position);
+                mOption_Viewgroup.setVisibility(View.VISIBLE);
+                addOptionView(mYueGong.get(position).getTitle(), "3");
+                mDropDownMenu.closeMenu();
+            }
+        });
+
+//        constellation.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                constellationAdapter.setCheckItem(position);
+//                constellationPosition = position;
+//            }
+//        });
+        //init context view
+        TextView textView = new TextView(mContext);
+        textView.setText("重置");
+        textView.setTextColor(Color.GRAY);
+        textView.setBackgroundResource(R.color.transparent);
+        textView.setGravity(Gravity.CENTER);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+        LinearLayout.LayoutParams param
+                = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        param.setMargins(10, 10, 10, 10);
+        textView.setPadding(10, 10, 10, 10);
+        textView.setLayoutParams(param);
+        final LinearLayout linearLayout = new LinearLayout(mContext);
+        linearLayout.addView(textView);
+        linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mDropDownMenu.setTabText(constellationPosition == 0 ? headers[3] : constellations[constellationPosition]);
-                mDropDownMenu.closeMenu();
+                mOption_Viewgroup.removeAllViews();
+                shoufuAdapter.setCheckItem(0);
+                yuegongAdapter.setCheckItem(0);
+                mOption_Viewgroup.addView(linearLayout);
+                mOption_Viewgroup.setVisibility(View.GONE);
             }
         });
-
-        //init popupViews
-        popupViews.add(cityView);
-        popupViews.add(ageView);
-        popupViews.add(sexView);
-        popupViews.add(constellationView);
-        popupViews.add(sexsView);
-        //add item click event
-        cityView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                cityAdapter.setCheckItem(position);
-                mDropDownMenu.setTabText(position == 0 ? headers[0] : citys[position]);
-                mDropDownMenu.closeMenu();
-            }
-        });
-
-        ageView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ageAdapter.setCheckItem(position);
-                mDropDownMenu.setTabText(position == 0 ? headers[1] : ages[position]);
-                mDropDownMenu.closeMenu();
-            }
-        });
-
-        sexView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                sexAdapter.setCheckItem(position);
-                mDropDownMenu.setTabText(position == 0 ? headers[2] : sexs[position]);
-                mDropDownMenu.closeMenu();
-            }
-        });
-
-        sexsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                sexsAdapter.setCheckItem(position);
-                mDropDownMenu.setTabText(position == 0 ? headers[4] : sexs[position]);
-                mDropDownMenu.closeMenu();
-            }
-        });
-
-        constellation.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                constellationAdapter.setCheckItem(position);
-                constellationPosition = position;
-            }
-        });
-
-        //init context view
-//        TextView contentView = new TextView(getActivity());
-//        contentView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-//        contentView.setText("内容显示区域");
-//        contentView.setGravity(Gravity.CENTER);
-//        contentView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-
+        mOption_Viewgroup.addView(linearLayout);
         //init dropdownview
         mDropDownMenu.setDropDownMenu(Arrays.asList(headers), popupViews);
+
     }
 
+    void addOptionView(String s, String tag) {
+        if (mOption_Viewgroup.getChildCount() > 1) {
+            for (int i = 0; i < mOption_Viewgroup.getChildCount(); i++) {
+                if (mOption_Viewgroup.getChildAt(i).getTag() == tag) {
+                    mOption_Viewgroup.removeView(mOption_Viewgroup.getChildAt(i));
+                }
+                break;
+            }
+        }
+
+        TextView optionIteam = new TextView(mContext);
+        optionIteam.setText(s);
+        optionIteam.setGravity(Gravity.CENTER);
+        optionIteam.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+        optionIteam.setTextColor(getResources().getColor(R.color.orange));
+        optionIteam.setBackgroundResource(R.drawable.option_checked);
+        LinearLayout.LayoutParams paramss = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        paramss.setMargins(10, 10, 10, 10);
+        optionIteam.setPadding(15, 10, 15, 10);
+        optionIteam.setLayoutParams(paramss);
+        final LinearLayout linearLayouts = new LinearLayout(mContext);
+        linearLayouts.addView(optionIteam);
+        linearLayouts.setTag(tag);
+        linearLayouts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOption_Viewgroup.removeView(linearLayouts);
+                if (mOption_Viewgroup.getChildCount() == 1) {
+                    mOption_Viewgroup.setVisibility(View.GONE);
+                }
+            }
+        });
+        if (mOption_Viewgroup.getChildCount() == 1) {
+            mOption_Viewgroup.addView(linearLayouts, 0);
+        } else {
+            mOption_Viewgroup.addView(linearLayouts, 1);
+        }
+
+    }
 
     @Override
     public void onScrollViewChangeListener(int l, int t, int oldl, int oldt) {
-        Log.d("ChangeListener", l+"-"+t+"-"+oldl+"-"+oldt+"-"+mDropDownMenu .getTop());
-        if (t >mDropDownMenu .getTop()+mDropDownMenu.getUnderLine().getHeight() && !isvisiable) {
-            isvisiable = true;
-            mDropDownMenu.removeView(mDropDownMenu.getTabView());
-            mDropDownMenu.removeView(mDropDownMenu.getUnderLine());
-            mDropDownMenu.removeView(mDropDownMenu.getContainerView());
-            carlist_top_viewgroup.addView(mDropDownMenu.getTabView(),0);
-            carlist_top_viewgroup.addView(mDropDownMenu.getUnderLine(),1);
-            carlist_top_viewgroup.addView(mDropDownMenu.getContainerView(),2);
-        } else if (t < mDropDownMenu.getTop() + mDropDownMenu.getTabView().getHeight()+mDropDownMenu.getUnderLine().getHeight() && isvisiable) {
-            isvisiable = false;
-            carlist_top_viewgroup.removeAllViews();
-            mDropDownMenu.addView(mDropDownMenu.getTabView(),0);
-            mDropDownMenu.addView(mDropDownMenu.getUnderLine(),1);
-            mDropDownMenu.addView(mDropDownMenu.getContainerView(),2);
+        if (t > carlist_move_viewgroup.getTop()) {
+            if (!isvisiable && carlist_top_viewgroup.getVisibility() == View.GONE) {
+                isvisiable = true;
+                carlist_move_viewgroup.removeAllViews();
+                carlist_top_viewgroup.setVisibility(View.VISIBLE);
+                carlist_top_viewgroup.addView(mDropDownMenu);
+            }
+        } else if (t < carlist_move_viewgroup.getTop() + mDropDownMenu.getTabView().getHeight()) {
+            if (isvisiable && carlist_top_viewgroup.getVisibility() == View.VISIBLE) {
+                isvisiable = false;
+                carlist_top_viewgroup.removeAllViews();
+                carlist_top_viewgroup.setVisibility(View.GONE);
+                carlist_move_viewgroup.addView(mDropDownMenu);
+            }
         }
     }
-
 
     private void initRxBus() {
         RxBus.get().toFlowable(ScrollViewTopEvent.class)
@@ -219,8 +267,8 @@ public class ShopFragment extends MvpFragment  implements ScrollViewTopXuanFuFor
                 .subscribe(new Consumer<ScrollViewTopEvent>() {
                     @Override
                     public void accept(@NonNull ScrollViewTopEvent event) throws Exception {
-                        if (event!=null&&event.istop){
-                            int top = mDropDownMenu.getTop();
+                        if (event != null && event.istop) {
+                            int top = carlist_move_viewgroup.getTop();
                             scrollView.smoothScrollTo(0, top);
                         }
                     }

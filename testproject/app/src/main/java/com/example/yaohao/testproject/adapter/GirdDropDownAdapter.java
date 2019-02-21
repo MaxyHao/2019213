@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 
 import com.example.yaohao.testproject.R;
+import com.example.yaohao.testproject.bean.MorenPaiXuEntity;
+import com.example.yaohao.testproject.bean.YueGongEntity;
 
 import java.util.List;
 
@@ -19,7 +21,7 @@ import butterknife.InjectView;
 public class GirdDropDownAdapter extends BaseAdapter {
 
     private Context context;
-    private List<String> list;
+    private List<MorenPaiXuEntity> list;
     private int checkItemPosition = 0;
 
     public void setCheckItem(int position) {
@@ -27,7 +29,7 @@ public class GirdDropDownAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    public GirdDropDownAdapter(Context context, List<String> list) {
+    public GirdDropDownAdapter(Context context, List<MorenPaiXuEntity> list) {
         this.context = context;
         this.list = list;
     }
@@ -38,8 +40,8 @@ public class GirdDropDownAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int position) {
-        return null;
+    public MorenPaiXuEntity getItem(int position) {
+        return list.get(position);
     }
 
     @Override
@@ -62,10 +64,10 @@ public class GirdDropDownAdapter extends BaseAdapter {
     }
 
     private void fillValue(int position, ViewHolder viewHolder) {
-        viewHolder.mText.setText(list.get(position));
+        viewHolder.mText.setText(list.get(position).getTitle());
         if (checkItemPosition != -1) {
             if (checkItemPosition == position) {
-                viewHolder.mText.setTextColor(context.getResources().getColor(R.color.drop_down_selected));
+                viewHolder.mText.setTextColor(context.getResources().getColor(R.color.orange));
                 viewHolder.mText.setCompoundDrawablesWithIntrinsicBounds(null, null, context.getResources().getDrawable(R.mipmap.drop_down_checked), null);
             } else {
                 viewHolder.mText.setTextColor(context.getResources().getColor(R.color.drop_down_unselected));

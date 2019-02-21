@@ -7,8 +7,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-
 import com.example.yaohao.testproject.R;
+import com.example.yaohao.testproject.bean.MorenPaiXuEntity;
+import com.example.yaohao.testproject.bean.ShouFuEntity;
 
 import java.util.List;
 
@@ -16,10 +17,10 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 
-public class ConstellationAdapter extends BaseAdapter {
+public class ListShouFuDropDownAdapter extends BaseAdapter {
 
     private Context context;
-    private List<String> list;
+    private List<ShouFuEntity> list;
     private int checkItemPosition = 0;
 
     public void setCheckItem(int position) {
@@ -27,7 +28,7 @@ public class ConstellationAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    public ConstellationAdapter(Context context, List<String> list) {
+    public ListShouFuDropDownAdapter(Context context, List<ShouFuEntity> list) {
         this.context = context;
         this.list = list;
     }
@@ -38,8 +39,8 @@ public class ConstellationAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int position) {
-        return null;
+    public ShouFuEntity getItem(int position) {
+        return list.get(position);
     }
 
     @Override
@@ -53,7 +54,7 @@ public class ConstellationAdapter extends BaseAdapter {
         if (convertView != null) {
             viewHolder = (ViewHolder) convertView.getTag();
         } else {
-            convertView = LayoutInflater.from(context).inflate(R.layout.item_constellation_layout, null);
+            convertView = LayoutInflater.from(context).inflate(R.layout.item_default_drop_down, null);
             viewHolder = new ViewHolder(convertView);
             convertView.setTag(viewHolder);
         }
@@ -62,14 +63,14 @@ public class ConstellationAdapter extends BaseAdapter {
     }
 
     private void fillValue(int position, ViewHolder viewHolder) {
-        viewHolder.mText.setText(list.get(position));
+        viewHolder.mText.setText(list.get(position).getTitle());
         if (checkItemPosition != -1) {
             if (checkItemPosition == position) {
                 viewHolder.mText.setTextColor(context.getResources().getColor(R.color.orange));
-                viewHolder.mText.setBackgroundResource(R.drawable.check_bg);
+                viewHolder.mText.setBackgroundResource(R.drawable.shoufu_bg_checked);
             } else {
                 viewHolder.mText.setTextColor(context.getResources().getColor(R.color.drop_down_unselected));
-                viewHolder.mText.setBackgroundResource(R.drawable.uncheck_bg);
+                viewHolder.mText.setBackgroundResource(R.drawable.shoufu_bg_nomall);
             }
         }
     }
