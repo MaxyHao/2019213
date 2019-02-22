@@ -13,9 +13,9 @@ public class PinyinPinPaiComparator implements Comparator<PinPaiEntity> {
 
 	public int compare(PinPaiEntity o1, PinPaiEntity o2) {
 		if (o1.getSortLetters().equals("@")
-				|| o2.getSortLetters().equals("*")) {
+				|| o2.getSortLetters().equals("#")) {
 			return -1;
-		} else if (o1.getSortLetters().equals("*")
+		} else if (o1.getSortLetters().equals("#")
 				|| o2.getSortLetters().equals("@")) {
 			return 1;
 		} else {

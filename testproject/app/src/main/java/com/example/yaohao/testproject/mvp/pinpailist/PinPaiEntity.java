@@ -1,10 +1,12 @@
 package com.example.yaohao.testproject.mvp.pinpailist;
 
+import java.io.Serializable;
+
 /**
  * Created by yaohao on 2019/2/20.
  */
 
-public class PinPaiEntity {
+public class PinPaiEntity implements Serializable {
     private int id;
     private String title;
     private String iconUrl;

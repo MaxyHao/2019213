@@ -31,6 +31,7 @@ public class EnjoyshopToolBar extends Toolbar {
     private TextView    mSearchView;
     private Button      mRightButton;
     private ImageButton mLeftButton;
+    private TextView mLeftText;
 
     public EnjoyshopToolBar(Context context) {
         this(context, null);
@@ -88,7 +89,7 @@ public class EnjoyshopToolBar extends Toolbar {
         if (mView == null) {
             mInflater = LayoutInflater.from(getContext());
             mView = mInflater.inflate(R.layout.toolbar, null);
-
+            mLeftText = (TextView) mView.findViewById(R.id.toolbar_leftText);
             mTextTitle = (TextView) mView.findViewById(R.id.toolbar_title);
             mSearchView = (TextView) mView.findViewById(R.id.toolbar_searchview);
             mRightButton = (Button) mView.findViewById(R.id.toolbar_rightButton);
@@ -119,6 +120,14 @@ public class EnjoyshopToolBar extends Toolbar {
 
     public void setRightButtonOnClickListener(OnClickListener li) {
         mRightButton.setOnClickListener(li);
+    }
+
+    public void setmLeftTextString(String s) {
+       mLeftText.setText(s);
+    }
+
+    public void setLeftTextVisibility(int i) {
+        mLeftText.setVisibility(i);
     }
 
     public void setRightButtonText(CharSequence text) {
@@ -157,7 +166,7 @@ public class EnjoyshopToolBar extends Toolbar {
             @Override
             public void onClick(View view) {
                 ((Activity) context).finish();
-                ((Activity) context).overridePendingTransition(0, 0);
+                ((Activity) context).overridePendingTransition(R.anim.oldactivity_start_right,R.anim.activity_end_right);
             }
         });
     }

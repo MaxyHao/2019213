@@ -260,7 +260,8 @@ public class DropDownMenu extends LinearLayout {
         System.out.println(current_tab_position);
         for (int i = 0; i < tabMenuView.getChildCount(); i = i + 1) {
             if (target==tabMenuView.getChildAt(1)&&i==1){
-                MoveUtils.go(mContext, PinPaiListActivity.class);
+//                MoveUtils.go(mContext, PinPaiListActivity.class);
+                RxBus.get().post(new ScrollViewTopEvent(2,true));
                 closeMenu();
             }else  if (target == tabMenuView.getChildAt(i)) {
                 if (current_tab_position == i) {

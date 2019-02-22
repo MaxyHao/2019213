@@ -17,15 +17,30 @@
         />
 
     <TextView
+        android:id="@+id/toolbar_leftText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/transparent"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="5dp"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp15"
+        android:visibility="gone"
+        android:layout_marginRight="10dp"
+        />
+
+    <TextView
         android:id="@+id/toolbar_searchview"
         style="@style/search_view"
         android:layout_width="match_parent"
         android:layout_height="35dp"
         android:layout_centerInParent="true"
         android:layout_gravity="center"
+        android:layout_toRightOf="@+id/toolbar_leftText"
         android:drawableLeft="@drawable/icon_search"
         android:gravity="center"
         android:text="请输入搜索内容"
+        android:layout_marginRight="@dimen/dp8"
         android:textColor="@color/white"
         android:visibility="gone"
         />

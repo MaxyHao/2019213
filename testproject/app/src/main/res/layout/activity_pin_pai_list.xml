@@ -20,32 +20,34 @@
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
             android:minHeight="?attr/actionBarSize"
-            app:isShowSearchView="false"
             app:isShowLeftIcon="true"
+            app:isShowSearchView="false"
             app:title="品牌"></com.example.yaohao.testproject.widget.EnjoyshopToolBar>
 
     </android.support.design.widget.AppBarLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <com.scwang.smartrefresh.layout.SmartRefreshLayout
             android:id="@+id/pinpailist_refreshLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <FrameLayout
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:paddingRight="@dimen/dp30"
-                >
+                android:paddingRight="@dimen/dp30">
 
                 <ListView
                     android:id="@+id/lv_pinpailist"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:divider="@color/transparent"
                     android:dividerHeight="0dp"
                     android:listSelector="@android:color/transparent"
-                    android:scrollbars="none"
-                    />
+                    android:scrollbars="none" />
 
                 <LinearLayout
                     android:id="@+id/title_layout"
@@ -81,17 +83,19 @@
 
             </FrameLayout>
         </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+        >
+
         <com.example.yaohao.testproject.widget.sideBar.SideBar
             android:id="@+id/sidebar"
             android:layout_width="30.0dip"
-            android:paddingTop="@dimen/dp50"
-            android:paddingBottom="@dimen/dp50"
             android:layout_height="350dp"
-            android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:layout_gravity="right|center"
             android:layout_marginBottom="25dp"
-            android:layout_marginTop="3dp" />
+            android:layout_marginTop="3dp"
+            android:paddingBottom="@dimen/dp50"
+            android:paddingTop="@dimen/dp50" />
     </RelativeLayout>
 
 

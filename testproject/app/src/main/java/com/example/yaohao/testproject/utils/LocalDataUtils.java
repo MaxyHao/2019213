@@ -61,6 +61,15 @@ public class LocalDataUtils {
         list.add(new PinPaiEntity(4, "雪佛兰", R.mipmap.pp_bmw));
         list.add(new PinPaiEntity(5, "玛莎拉蒂", R.mipmap.pp_bmw));
         list.add(new PinPaiEntity(6, "奇瑞", R.mipmap.pp_bmw));
+        list.add(new PinPaiEntity(7, "雪佛兰", R.mipmap.pp_bmw));
+        list.add(new PinPaiEntity(8, "玛莎拉蒂", R.mipmap.pp_bmw));
+        list.add(new PinPaiEntity(9, "奇瑞", R.mipmap.pp_bmw));
+        list.add(new PinPaiEntity(10, "奇瑞", R.mipmap.pp_bmw));
+        list.add(new PinPaiEntity(11, "奇瑞", R.mipmap.pp_bmw));
+        list.add(new PinPaiEntity(12, "奇瑞", R.mipmap.pp_bmw));
+        list.add(new PinPaiEntity(7, "雪佛兰", R.mipmap.pp_bmw));
+        list.add(new PinPaiEntity(8, "玛莎拉蒂", R.mipmap.pp_bmw));
+        list.add(new PinPaiEntity(9, "奇瑞", R.mipmap.pp_bmw));
         return list;
     }
 }

@@ -1,5 +1,6 @@
 package com.example.yaohao.testproject;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,26 +41,14 @@ public class MainActivity extends BaseActivity {
         ButterKnife.inject(this);
         initTab();
         setNavigationBar(mVBottom);
-//        RxBus.get().toFlowable(MorenPaiXuEntity.class).map(new Function<Object, MorenPaiXuEntity>() {
-//            @Override
-//            public MorenPaiXuEntity apply(@NonNull Object o) throws Exception {
-//                return (MorenPaiXuEntity)o;
-//            }
-//        }).subscribe(new Consumer<MorenPaiXuEntity>() {
-//            @Override
-//            public void accept(MorenPaiXuEntity morenPaiXuEntity) throws Exception {
-//                if (morenPaiXuEntity != null) {
-//                }
-//            }
-//        });
     }
 
     private void initTab() {
-        Tab tab_oldcar = new Tab(OldCarFragment.class, R.string.ershouche, R.drawable.selector_icon_shop);
         Tab tab_shop = new Tab(ShopFragment.class, R.string.shop, R.drawable.selector_icon_shop);
+        Tab tab_oldcar = new Tab(OldCarFragment.class, R.string.ershouche, R.drawable.selector_icon_shop);
         Tab tab_mine = new Tab(MineFragment.class, R.string.mine, R.drawable.selector_icon_mine);
-        mTabs.add(tab_oldcar);
         mTabs.add(tab_shop);
+        mTabs.add(tab_oldcar);
         mTabs.add(tab_mine);
         mInflater = LayoutInflater.from(this);
         mTabhost = (FragmentTabHost) this.findViewById(android.R.id.tabhost);
@@ -81,5 +70,10 @@ public class MainActivity extends BaseActivity {
         img.setImageResource(tab.getIcon());
         text.setText(tab.getTitle());
         return view;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

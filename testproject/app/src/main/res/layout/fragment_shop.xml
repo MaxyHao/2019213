@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:fitsSystemWindows="true"
-        android:paddingTop="10dp">
+        android:paddingTop="25dp">
 
         <com.example.yaohao.testproject.widget.EnjoyshopToolBar
             android:id="@+id/toolbar"
@@ -19,8 +19,8 @@
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
             android:minHeight="?attr/actionBarSize"
-            app:isShowSearchView="false"
-            app:title="@string/ershouche"></com.example.yaohao.testproject.widget.EnjoyshopToolBar>
+            app:isShowSearchView="true"
+            ></com.example.yaohao.testproject.widget.EnjoyshopToolBar>
 
     </android.support.design.widget.AppBarLayout>
 

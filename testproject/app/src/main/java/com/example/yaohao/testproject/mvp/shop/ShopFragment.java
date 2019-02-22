@@ -1,5 +1,6 @@
 package com.example.yaohao.testproject.mvp.shop;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -24,12 +25,13 @@ import com.example.yaohao.testproject.bean.MorenPaiXuEntity;
 import com.example.yaohao.testproject.bean.ScrollViewTopEvent;
 import com.example.yaohao.testproject.bean.ShouFuEntity;
 import com.example.yaohao.testproject.bean.YueGongEntity;
-import com.example.yaohao.testproject.mvp.base.BasePresenter;
 import com.example.yaohao.testproject.mvp.base.MvpFragment;
+import com.example.yaohao.testproject.mvp.pinpailist.PinPaiEntity;
+import com.example.yaohao.testproject.mvp.pinpailist.PinPaiListActivity;
 import com.example.yaohao.testproject.retrofit.RxBus;
-import com.example.yaohao.testproject.utils.DensityUtils;
 import com.example.yaohao.testproject.utils.LocalDataUtils;
 import com.example.yaohao.testproject.widget.DropDownMenu;
+import com.example.yaohao.testproject.widget.EnjoyshopToolBar;
 import com.example.yaohao.testproject.widget.ScrollViewTopXuanFuForListView;
 
 import org.apmem.tools.layouts.FlowLayout;
@@ -48,10 +50,14 @@ import io.reactivex.functions.Function;
  * Created by yaohao on 2019/2/14.
  */
 
-public class ShopFragment extends MvpFragment implements ScrollViewTopXuanFuForListView.OnScrollToBottomListener {
+public class ShopFragment extends MvpFragment<NewCarPresenter> implements ScrollViewTopXuanFuForListView.OnScrollToBottomListener, NewCarListView {
 
     private static final String TAG_SHOUFU = "2";
     private static final String TAG_YUEGONG = "3";
+    private static final int TAG_PINPAI = 1;
+    public static final String TAG_SELECTEDPINPAI = "PinPaiEntity";
+    public static final String TAG_PP_POSITION = "PP_position";
+    private int mPosition = 0;
     @InjectView(R.id.dropDownMenu)
     DropDownMenu mDropDownMenu;
     private String headers[] = {"默认排序", "品牌", "首付", "月供"};
@@ -76,11 +82,8 @@ public class ShopFragment extends MvpFragment implements ScrollViewTopXuanFuForL
     //tab下条件选择显示容器
     @InjectView(R.id.option_viewGroup)
     FlowLayout mOption_Viewgroup;
-
-    @Override
-    protected BasePresenter createPresenter() {
-        return null;
-    }
+    @InjectView(R.id.toolbar)
+    EnjoyshopToolBar toolBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -92,6 +95,8 @@ public class ShopFragment extends MvpFragment implements ScrollViewTopXuanFuForL
         initRxBus();
         scrollView.setOnScrollToBottomLintener(this);
         mOption_Viewgroup.setVisibility(View.GONE);
+        toolBar.setLeftTextVisibility(View.VISIBLE);
+        toolBar.setmLeftTextString("西安");
         return view;
     }
 
@@ -186,6 +191,7 @@ public class ShopFragment extends MvpFragment implements ScrollViewTopXuanFuForL
                 mOption_Viewgroup.removeAllViews();
                 shoufuAdapter.setCheckItem(0);
                 yuegongAdapter.setCheckItem(0);
+                mPosition = 0;
                 mOption_Viewgroup.addView(linearLayout);
                 mOption_Viewgroup.setVisibility(View.GONE);
             }
@@ -196,16 +202,18 @@ public class ShopFragment extends MvpFragment implements ScrollViewTopXuanFuForL
 
     }
 
+
+    //添加选中项item栏
     void addOptionView(String s, String tag) {
         if (mOption_Viewgroup.getChildCount() > 1) {
             for (int i = 0; i < mOption_Viewgroup.getChildCount(); i++) {
+                Log.d("Optiontag",mOption_Viewgroup.getChildAt(i).getTag()+"---"+tag);
                 if (mOption_Viewgroup.getChildAt(i).getTag() == tag) {
                     mOption_Viewgroup.removeView(mOption_Viewgroup.getChildAt(i));
+                    break;
                 }
-                break;
             }
         }
-
         TextView optionIteam = new TextView(mContext);
         optionIteam.setText(s);
         optionIteam.setGravity(Gravity.CENTER);
@@ -224,6 +232,13 @@ public class ShopFragment extends MvpFragment implements ScrollViewTopXuanFuForL
             @Override
             public void onClick(View v) {
                 mOption_Viewgroup.removeView(linearLayouts);
+                if (linearLayouts.getTag().equals("1")) {
+                    mPosition=0;
+                } else if (linearLayouts.getTag().equals("2")) {
+                    shoufuAdapter.setCheckItem(0);
+                } else if (linearLayouts.getTag().equals("3")) {
+                    yuegongAdapter.setCheckItem(0);
+                }
                 if (mOption_Viewgroup.getChildCount() == 1) {
                     mOption_Viewgroup.setVisibility(View.GONE);
                 }
@@ -231,12 +246,14 @@ public class ShopFragment extends MvpFragment implements ScrollViewTopXuanFuForL
         });
         if (mOption_Viewgroup.getChildCount() == 1) {
             mOption_Viewgroup.addView(linearLayouts, 0);
-        } else {
+        } else if (mOption_Viewgroup.getChildCount() == 2) {
             mOption_Viewgroup.addView(linearLayouts, 1);
+        } else {
+            mOption_Viewgroup.addView(linearLayouts, 2);
         }
 
     }
-
+    //自定义接口实现顶部悬浮tab栏
     @Override
     public void onScrollViewChangeListener(int l, int t, int oldl, int oldt) {
         if (t > carlist_move_viewgroup.getTop()) {
@@ -267,11 +284,50 @@ public class ShopFragment extends MvpFragment implements ScrollViewTopXuanFuForL
                 .subscribe(new Consumer<ScrollViewTopEvent>() {
                     @Override
                     public void accept(@NonNull ScrollViewTopEvent event) throws Exception {
-                        if (event != null && event.istop) {
-                            int top = carlist_move_viewgroup.getTop();
-                            scrollView.smoothScrollTo(0, top);
+                        if (event != null) {
+                            if (event.id == 1 && event.istop) {
+                                int top = carlist_move_viewgroup.getTop();
+                                scrollView.smoothScrollTo(0, top);
+                            } else if (event.id == 2) {
+                                startActivityForResult(new Intent(mContext, PinPaiListActivity.class).putExtra(ShopFragment.TAG_PP_POSITION, mPosition), TAG_PINPAI);
+                                getActivity().overridePendingTransition(R.anim.activity_start_right, R.anim.oldactivity_end_right);
+                            }
                         }
                     }
                 });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (getActivity().RESULT_OK == resultCode && requestCode == TAG_PINPAI) {
+            PinPaiEntity entity = (PinPaiEntity) data.getSerializableExtra(TAG_SELECTEDPINPAI);
+            mPosition = data.getIntExtra(TAG_PP_POSITION, 0);
+            if (mPosition!=0){
+                mOption_Viewgroup.setVisibility(View.VISIBLE);
+                addOptionView(entity.getTitle(), "1");
+            }
+
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onFindNewCarListSuccess() {
+
+    }
+
+    @Override
+    public void onFail(String msg) {
+
+    }
+
+    @Override
+    public void onFinish() {
+
+    }
+
+    @Override
+    protected NewCarPresenter createPresenter() {
+        return new NewCarPresenter(this);
     }
 }

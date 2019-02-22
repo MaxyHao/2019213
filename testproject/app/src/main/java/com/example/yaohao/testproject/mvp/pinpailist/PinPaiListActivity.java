@@ -1,9 +1,10 @@
 package com.example.yaohao.testproject.mvp.pinpailist;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -15,17 +16,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.yaohao.testproject.R;
+import com.example.yaohao.testproject.mvp.shop.ShopFragment;
 import com.example.yaohao.testproject.utils.LocalDataUtils;
 import com.example.yaohao.testproject.widget.EnjoyshopToolBar;
 import com.example.yaohao.testproject.widget.sideBar.CharacterParser;
 import com.example.yaohao.testproject.widget.sideBar.PinyinPinPaiComparator;
 import com.example.yaohao.testproject.widget.sideBar.SideBar;
-import com.example.yaohao.testproject.widget.sideBar.SortPinPaiAdapter;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -50,6 +50,7 @@ public class PinPaiListActivity extends AppCompatActivity implements SectionInde
     private ArrayList<PinPaiEntity> mPinPaiList;
     private int lastFirstVisibleItem = -1;
     private Context mContext;
+    private int mPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,21 +62,37 @@ public class PinPaiListActivity extends AppCompatActivity implements SectionInde
 //        }
         mContext=this;
         mPinPaiList = LocalDataUtils.getPinPaiList();
+        mPosition=getIntent().getIntExtra(ShopFragment.TAG_PP_POSITION,0);
         initViews();
         initData();
 
         mPinPaiList_RefreshLayout.setEnableLoadMore(false);
         mPinPaiList_RefreshLayout.setEnableRefresh(false);
         mPinPaiList_RefreshLayout.setEnableOverScrollDrag(true);
+        listPinPai.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+               PinPaiEntity pinPaiEntity= (PinPaiEntity) sortPinPaiAdapter.getItem(position);
+                sortPinPaiAdapter.setCheckItem(position);
+                Intent intent=new Intent();
+                intent.putExtra(ShopFragment.TAG_SELECTEDPINPAI,pinPaiEntity);
+                intent.putExtra(ShopFragment.TAG_PP_POSITION,position);
+                setResult(RESULT_OK,intent);
+                finish();
+                overridePendingTransition(R.anim.oldactivity_start_right,R.anim.activity_end_right);
+
+            }
+        });
 
     }
 
     private void initData() {
 
-        mPinPaiList = filledData((ArrayList<PinPaiEntity>) mPinPaiList);
+        mPinPaiList = filledData(mPinPaiList);
         Collections.sort(mPinPaiList, pinyinComparator);
         if (sortPinPaiAdapter == null) {
             sortPinPaiAdapter = new SortPinPaiAdapter(mContext, mPinPaiList);
+            sortPinPaiAdapter.setCheckItem(mPosition);
             listPinPai.setAdapter(sortPinPaiAdapter);
         } else {
             sortPinPaiAdapter.updateListView(mPinPaiList);
@@ -86,7 +103,6 @@ public class PinPaiListActivity extends AppCompatActivity implements SectionInde
                 @Override
                 public void onScrollStateChanged(AbsListView view, int scrollState) {
                 }
-
 
                 @Override
                 public void onScroll(AbsListView view, int firstVisibleItem,
@@ -138,7 +154,6 @@ public class PinPaiListActivity extends AppCompatActivity implements SectionInde
         characterParser = CharacterParser.getInstance();
         pinyinComparator = new PinyinPinPaiComparator();
         listPinPai = (ListView) findViewById(R.id.lv_pinpailist);
-        listPinPai.setVisibility(View.GONE);
         sideBar = (SideBar) findViewById(R.id.sidebar);
         dialogs = (TextView) findViewById(R.id.dialog);
         sideBar.setTextView(dialogs);
@@ -149,17 +164,6 @@ public class PinPaiListActivity extends AppCompatActivity implements SectionInde
                 if (position != -1) {
                     listPinPai.setSelection(position);
                 }
-            }
-        });
-        listPinPai.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                Toast.makeText(
-                        getApplication(),
-                        ((PinPaiEntity) sortPinPaiAdapter.getItem(position)).getTitle(),
-                        Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -187,34 +191,34 @@ public class PinPaiListActivity extends AppCompatActivity implements SectionInde
     }
 
 
-    /**
-     * ListView
-     */
-    private void filterData(String filterStr) {
-        List<PinPaiEntity> filterDateList = new ArrayList<PinPaiEntity>();
+//    /**
+//     * ListView
+//     */
+//    private void filterData(String filterStr) {
+//        List<PinPaiEntity> filterDateList = new ArrayList<PinPaiEntity>();
+//
+//        if (TextUtils.isEmpty(filterStr)) {
+//            filterDateList = mPinPaiList;
+//            tvNofriends.setVisibility(View.GONE);
+//        } else {
+//            filterDateList.clear();
+//            for (PinPaiEntity sortModel : mPinPaiList) {
+//                String name = sortModel.getTitle();
+//                if (name.indexOf(filterStr.toString()) != -1
+//                        || characterParser.getSelling(name).startsWith(
+//                        filterStr.toString())) {
+//                    filterDateList.add(sortModel);
+//                }
+//            }
+//        }
 
-        if (TextUtils.isEmpty(filterStr)) {
-            filterDateList = mPinPaiList;
-            tvNofriends.setVisibility(View.GONE);
-        } else {
-            filterDateList.clear();
-            for (PinPaiEntity sortModel : mPinPaiList) {
-                String name = sortModel.getTitle();
-                if (name.indexOf(filterStr.toString()) != -1
-                        || characterParser.getSelling(name).startsWith(
-                        filterStr.toString())) {
-                    filterDateList.add(sortModel);
-                }
-            }
-        }
-
-        // ���a-z��������
-        Collections.sort(filterDateList, pinyinComparator);
-        sortPinPaiAdapter.updateListView(filterDateList);
-        if (filterDateList.size() == 0) {
-            tvNofriends.setVisibility(View.VISIBLE);
-        }
-    }
+//        // ���a-z��������
+//        Collections.sort(filterDateList, pinyinComparator);
+//        sortPinPaiAdapter.updateListView(filterDateList);
+//        if (filterDateList.size() == 0) {
+//            tvNofriends.setVisibility(View.VISIBLE);
+//        }
+//    }
 
 
     @Override
@@ -247,8 +251,9 @@ public class PinPaiListActivity extends AppCompatActivity implements SectionInde
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.oldactivity_start_right,R.anim.activity_end_right);
     }
 }
 

@@ -1,4 +1,4 @@
-package com.example.yaohao.testproject.widget.sideBar;
+package com.example.yaohao.testproject.mvp.pinpailist;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,9 +8,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
-import com.example.yaohao.testproject.R;
-import com.example.yaohao.testproject.mvp.pinpailist.PinPaiEntity;
 
+import com.example.yaohao.testproject.R;
 
 import java.util.List;
 
@@ -22,7 +21,12 @@ import java.util.List;
 public class SortPinPaiAdapter extends BaseAdapter  implements SectionIndexer {
     private List<PinPaiEntity> data = null;
     private Context context;
+    private int checkItemPosition = 0;
 
+    public void setCheckItem(int position) {
+        checkItemPosition = position;
+        notifyDataSetChanged();
+    }
     public SortPinPaiAdapter(Context mContext, List<PinPaiEntity> list) {
         this.context = mContext;
         this.data = list;
@@ -74,18 +78,27 @@ public class SortPinPaiAdapter extends BaseAdapter  implements SectionIndexer {
             viewHolder.tvLetter.setVisibility(View.GONE);
         }
         if (entity != null) {
+            if (position==0){
+                viewHolder.ppIcon.setVisibility(View.GONE);
+            }else {
+                viewHolder.ppIcon.setVisibility(View.VISIBLE);
+            }
+            if (checkItemPosition != -1) {
+                if (checkItemPosition == position&&position!=0) {
+                    viewHolder.tvTitle.setTextColor(context.getResources().getColor(R.color.orange));
+                } else {
+                    viewHolder.tvTitle.setTextColor(context.getResources().getColor(R.color.lightblack));
+                }
+            }
 
-            view.findViewById(R.id.item_surface)
-                .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                    }
-                });
+//            view.findViewById(R.id.item_surface)
+//                .setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//
+//                    }
+//                });
         }
-
-
-
         return view;
 
     }
@@ -118,7 +131,7 @@ public class SortPinPaiAdapter extends BaseAdapter  implements SectionIndexer {
         if (sortStr.matches("[A-Z]")) {
             return sortStr;
         } else {
-            return "#";
+            return "*";
         }
     }
 
