@@ -1,10 +1,13 @@
 package com.example.yaohao.testproject.mvp.codelogin;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
@@ -13,6 +16,7 @@ import android.widget.TextView;
 
 import com.example.yaohao.testproject.MainActivity;
 import com.example.yaohao.testproject.R;
+import com.example.yaohao.testproject.Word;
 import com.example.yaohao.testproject.mvp.base.MvpActivity;
 import com.example.yaohao.testproject.retrofit.DefaultParser;
 import com.example.yaohao.testproject.utils.CheckUtils;
@@ -60,14 +64,19 @@ public class CodeLoginActivity extends MvpActivity<CodeLoginPresenter> implement
     private String phone;
     private TimeCount timeCount = new TimeCount(60000, 1000); //倒计时一分钟
     private Context mContext;
-
+    private String[] promissions = {
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+    };
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_yan_zheng_ma_login);
         ButterKnife.inject(this);
         initClick();
-        mContext=this;
+        isAndroidO();
+        mContext = this;
     }
 
     private void initClick() {
@@ -113,22 +122,22 @@ public class CodeLoginActivity extends MvpActivity<CodeLoginPresenter> implement
 
     //验证码登录
     private void codeLogin() {
-        if (TextUtils.isEmpty(mEtUsername.getText().toString().trim())) {
-            ToastUtils.showShort(CodeLoginActivity.this, "请输入用户名");
-            return;
-        }
-        if (TextUtils.isEmpty(mEtPhone.getText().toString().trim())) {
-            ToastUtils.showShort(CodeLoginActivity.this, "请输入手机号");
-            return;
-        }
-        if (CheckUtils.isMobileNO(mEtPhone.getText().toString()) == false) {
-            ToastUtils.showShort(CodeLoginActivity.this, "请输入正确的手机号");
-            return;
-        }
-        if (TextUtils.isEmpty(mEtCode.getText().toString().trim())) {
-            ToastUtils.showShort(CodeLoginActivity.this, "请输入验证码");
-            return;
-        }
+//        if (TextUtils.isEmpty(mEtUsername.getText().toString().trim())) {
+//            ToastUtils.showShort(CodeLoginActivity.this, "请输入用户名");
+//            return;
+//        }
+//        if (TextUtils.isEmpty(mEtPhone.getText().toString().trim())) {
+//            ToastUtils.showShort(CodeLoginActivity.this, "请输入手机号");
+//            return;
+//        }
+//        if (CheckUtils.isMobileNO(mEtPhone.getText().toString()) == false) {
+//            ToastUtils.showShort(CodeLoginActivity.this, "请输入正确的手机号");
+//            return;
+//        }
+//        if (TextUtils.isEmpty(mEtCode.getText().toString().trim())) {
+//            ToastUtils.showShort(CodeLoginActivity.this, "请输入验证码");
+//            return;
+//        }
 
 //        String sign = GetSignString.getSignString();
 //        final String token = CreateToken.getMd5Token(sign);
@@ -232,10 +241,9 @@ public class CodeLoginActivity extends MvpActivity<CodeLoginPresenter> implement
 
     @Override
     public void getPhone(GetPhoneBean getPhoneBean) {
-        if (getPhoneBean.getStatus() == 1)
-        {
+        if (getPhoneBean.getStatus() == 1) {
             mEtPhone.setText(getPhoneBean.getData());
-        }else {
+        } else {
             ToastUtils.showShort(getPhoneBean.getErrMsg());
         }
     }
@@ -279,5 +287,89 @@ public class CodeLoginActivity extends MvpActivity<CodeLoginPresenter> implement
     protected void onPause() {
         super.onPause();
         onFinish();
+    }
+
+
+    //判断是否是Android8.0
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void isAndroidO() {
+        LogUtils.i("isAndroidO");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) //如果是8.0系统，则判断是否缺少悬浮框权限和自动更新权限
+        {
+            //如果是8.0系统，首先判断是否具有悬浮框权限
+//            boolean isAppOps = CanXuanFuUtils.getAppOps(this);
+//            LogUtils.i("是否可以悬浮：" + isAppOps);
+//            if (isAppOps == false) //如果不可以悬浮,申请悬浮权限
+//            {
+//                startXuanFuPermissionSettingActivity();
+//                return;
+//            }
+            //如果直接就可以悬浮，则判断是否可以自动更新
+            boolean hasInstallPermission = getPackageManager().canRequestPackageInstalls();
+            LogUtils.i("是否可以自动更新：" + hasInstallPermission);
+            if (hasInstallPermission == false) //如果不能自动更新，则跳转到允许安装未知来源应用的界面
+            {
+//                startInstallPermissionSettingActivity();
+                return;
+            }
+            //如果既能悬浮，又能自动更新，则直接判断是否具有其他权限
+            hasPromission();
+        } else { //如果不是8.0系统，直接判断是否具有所需权限（针对6.0的权限）
+            hasPromission();
+        }
+    }
+
+    //判断是否具有权限
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void hasPromission() {
+        boolean hasPromission = verifyPermissions(promissions);
+        LogUtils.i("hasPromission");
+        LogUtils.i("hasPromission：" + hasPromission);
+        if (hasPromission) {
+//            afterRequestPermissoion();
+        } else {
+            LogUtils.i("hasPromission——申请权限");
+            requestPermissions(promissions, Word.REQUESTCODE_1); //申请权限
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        LogUtils.i("onRequestPermissionsResult_activity");
+        LogUtils.i("requestCode:" + requestCode);
+        if (requestCode == Word.REQUESTCODE_1) {
+            boolean hasPromission = verifyPermissions(promissions);
+            LogUtils.i("onRequestPermissionsResult_hasPromission:" + hasPromission);
+            if (hasPromission) {
+                afterRequestPermissoion();
+            } else {
+                LogUtils.i("onRequestPermissionsResult_hasPromission ===");
+                showMissingPermissionDialog();
+            }
+        }
+    }
+
+    private void afterRequestPermissoion() {
+        LogUtils.i("afterRequestPermissoion");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            boolean isAppOps = CanXuanFuUtils.getAppOps(this);
+//            LogUtils.i("isAppOps:" + isAppOps);
+//            if (isAppOps == false) {
+//                ToastUtils.showShort(this, "缺少悬浮权限，提醒打点功能将受影响");
+//            }
+            boolean hasInstallPermission = getPackageManager().canRequestPackageInstalls();
+            LogUtils.i("hasInstallPermission:" + hasInstallPermission);
+            if (hasInstallPermission == false) {
+                ToastUtils.showShort(this, "缺少自动更新权限，版本升级功能将受影响");
+            } else {
+//                login();
+                ToastUtils.showShort(this, "1");
+            }
+        } else {
+//            login();
+            ToastUtils.showShort(this, "2");
+        }
     }
 }

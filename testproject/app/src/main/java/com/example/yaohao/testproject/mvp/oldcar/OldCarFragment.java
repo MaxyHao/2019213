@@ -41,9 +41,7 @@ public class OldCarFragment extends MvpFragment<OldCarPresenter> implements  Old
     EnjoyshopToolBar toolBar;
     @InjectView(R.id.oldcar_Refresh)
     SmartRefreshLayout oldcar_Refresh;
-    @InjectView(R.id.scrollView)
-    ScrollViewTopXuanFuForListView scrollView;
-    
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_oldcar, null);

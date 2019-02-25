@@ -50,7 +50,7 @@ public class PinPaiListActivity extends AppCompatActivity implements SectionInde
     private ArrayList<PinPaiEntity> mPinPaiList;
     private int lastFirstVisibleItem = -1;
     private Context mContext;
-    private int mPosition;
+    private int mPosition=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

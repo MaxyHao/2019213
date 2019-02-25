@@ -1,49 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.scwang.smartrefresh.layout.SmartRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/oldcar_Refresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <android.support.design.widget.AppBarLayout
+  >
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        android:fitsSystemWindows="true"
-        android:paddingTop="@dimen/dp10">
+        android:layout_height="match_parent">
 
-        <com.example.yaohao.testproject.widget.EnjoyshopToolBar
-            android:id="@+id/toolbar"
+        <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:minHeight="?attr/actionBarSize"
-            app:isShowSearchView="false"
-            app:title="二手车"></com.example.yaohao.testproject.widget.EnjoyshopToolBar>
-        <!--android:minHeight="?attr/actionBarSize"-->
-    </android.support.design.widget.AppBarLayout>
+            android:layout_height="wrap_content">
 
-    <com.scwang.smartrefresh.layout.SmartRefreshLayout
-        android:id="@+id/oldcar_Refresh"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/dp3">
+            <com.example.yaohao.testproject.widget.EnjoyshopToolBar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:minHeight="?attr/actionBarSize"
+                app:isShowSearchView="false"
+                app:title="二手车"></com.example.yaohao.testproject.widget.EnjoyshopToolBar>
 
-        <com.example.yaohao.testproject.widget.ScrollViewTopXuanFuForListView
-            android:id="@+id/scrollView"
-            android:layout_width="match_parent"
-            android:layout_height="2000dp">
 
-            <LinearLayout
+            <com.example.yaohao.testproject.widget.DropDownMenu
+                android:id="@+id/dropDownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                app:dddividerColor="@color/gray"
+                app:ddmaskColor="@color/mask_color"
+                app:ddmenuBackgroundColor="@color/white"
+                app:ddmenuMenuHeightPercent="1"
+                app:ddmenuSelectedIcon="@mipmap/drop_down_selected_icon"
+                app:ddmenuTextSize="13sp"
+                app:ddmenuUnselectedIcon="@mipmap/drop_down_unselected_icon"
+                app:ddtextSelectedColor="@color/orange"
+                app:ddtextUnselectedColor="@color/drop_down_unselected"
+                app:ddunderlineColor="@color/lightgray" />
 
-            </LinearLayout>
+        </android.support.design.widget.AppBarLayout>
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/reclerview"
+            android:layout_width="match_parent"
 
-        </com.example.yaohao.testproject.widget.ScrollViewTopXuanFuForListView>
-    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+            android:layout_height="match_parent">
+        </android.support.v7.widget.RecyclerView>
 
-
-</LinearLayout>
+    </android.support.design.widget.CoordinatorLayout>
+</com.scwang.smartrefresh.layout.SmartRefreshLayout>

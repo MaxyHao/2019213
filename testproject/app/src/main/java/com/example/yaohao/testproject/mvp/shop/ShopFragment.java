@@ -3,6 +3,8 @@ package com.example.yaohao.testproject.mvp.shop;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Address;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -29,7 +31,9 @@ import com.example.yaohao.testproject.mvp.base.MvpFragment;
 import com.example.yaohao.testproject.mvp.pinpailist.PinPaiEntity;
 import com.example.yaohao.testproject.mvp.pinpailist.PinPaiListActivity;
 import com.example.yaohao.testproject.retrofit.RxBus;
+import com.example.yaohao.testproject.utils.GpsUtils;
 import com.example.yaohao.testproject.utils.LocalDataUtils;
+import com.example.yaohao.testproject.utils.LogUtils;
 import com.example.yaohao.testproject.widget.DropDownMenu;
 import com.example.yaohao.testproject.widget.EnjoyshopToolBar;
 import com.example.yaohao.testproject.widget.ScrollViewTopXuanFuForListView;
@@ -84,6 +88,8 @@ public class ShopFragment extends MvpFragment<NewCarPresenter> implements Scroll
     FlowLayout mOption_Viewgroup;
     @InjectView(R.id.toolbar)
     EnjoyshopToolBar toolBar;
+    private boolean isUp;
+    private boolean isDown;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -96,7 +102,23 @@ public class ShopFragment extends MvpFragment<NewCarPresenter> implements Scroll
         scrollView.setOnScrollToBottomLintener(this);
         mOption_Viewgroup.setVisibility(View.GONE);
         toolBar.setLeftTextVisibility(View.VISIBLE);
-        toolBar.setmLeftTextString("西安");
+        GpsUtils.getInstance(mContext).getLngAndLat(new GpsUtils.OnLocationResultListener() {
+            @Override
+            public void onLocationResult(Location location) {
+                Log.d("location",location.toString());
+                toolBar.setmLeftTextString(location.getProvider());
+            }
+
+            @Override
+            public void onLocationCity(Address ad) {
+                toolBar.setmLeftTextString(ad.getLocality());
+            }
+
+            @Override
+            public void OnLocationChange(Location location) {
+
+            }
+        });
         return view;
     }
 
@@ -256,15 +278,27 @@ public class ShopFragment extends MvpFragment<NewCarPresenter> implements Scroll
     //自定义接口实现顶部悬浮tab栏
     @Override
     public void onScrollViewChangeListener(int l, int t, int oldl, int oldt) {
+        Log.d("ScrollViewChange",t+"---"+oldt);
+        if (oldt<t){
+             isUp = true;
+             isDown = false;
+        }else {
+             isUp = false;
+             isDown = true;
+        }
         if (t > carlist_move_viewgroup.getTop()) {
-            if (!isvisiable && carlist_top_viewgroup.getVisibility() == View.GONE) {
+            Log.d("ScrollViewChange","---------------------------------");
+            if (!isvisiable && carlist_top_viewgroup.getVisibility() == View.GONE&&isUp) {
+                Log.d("ScrollViewChange","+++++++++++++++++++++++++++++");
                 isvisiable = true;
                 carlist_move_viewgroup.removeAllViews();
                 carlist_top_viewgroup.setVisibility(View.VISIBLE);
                 carlist_top_viewgroup.addView(mDropDownMenu);
             }
         } else if (t < carlist_move_viewgroup.getTop() + mDropDownMenu.getTabView().getHeight()) {
-            if (isvisiable && carlist_top_viewgroup.getVisibility() == View.VISIBLE) {
+            Log.d("ScrollViewChange","---------------------------------v");
+            if (isvisiable && carlist_top_viewgroup.getVisibility() == View.VISIBLE&&isDown) {
+                Log.d("ScrollViewChange","+++++++++++++++++++++++++++++v");
                 isvisiable = false;
                 carlist_top_viewgroup.removeAllViews();
                 carlist_top_viewgroup.setVisibility(View.GONE);
