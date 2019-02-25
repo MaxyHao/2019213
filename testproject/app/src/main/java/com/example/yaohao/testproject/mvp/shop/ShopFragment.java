@@ -278,7 +278,6 @@ public class ShopFragment extends MvpFragment<NewCarPresenter> implements Scroll
     //自定义接口实现顶部悬浮tab栏
     @Override
     public void onScrollViewChangeListener(int l, int t, int oldl, int oldt) {
-        Log.d("ScrollViewChange",t+"---"+oldt);
         if (oldt<t){
              isUp = true;
              isDown = false;
@@ -286,19 +285,15 @@ public class ShopFragment extends MvpFragment<NewCarPresenter> implements Scroll
              isUp = false;
              isDown = true;
         }
-        if (t > carlist_move_viewgroup.getTop()) {
-            Log.d("ScrollViewChange","---------------------------------");
-            if (!isvisiable && carlist_top_viewgroup.getVisibility() == View.GONE&&isUp) {
-                Log.d("ScrollViewChange","+++++++++++++++++++++++++++++");
+        if (t >= carlist_move_viewgroup.getTop()) {
+            if (!isvisiable && carlist_top_viewgroup.getVisibility() == View.GONE&&carlist_top_viewgroup.getChildCount()==0) {
                 isvisiable = true;
                 carlist_move_viewgroup.removeAllViews();
                 carlist_top_viewgroup.setVisibility(View.VISIBLE);
                 carlist_top_viewgroup.addView(mDropDownMenu);
             }
-        } else if (t < carlist_move_viewgroup.getTop() + mDropDownMenu.getTabView().getHeight()) {
-            Log.d("ScrollViewChange","---------------------------------v");
-            if (isvisiable && carlist_top_viewgroup.getVisibility() == View.VISIBLE&&isDown) {
-                Log.d("ScrollViewChange","+++++++++++++++++++++++++++++v");
+        } else if (t <= carlist_move_viewgroup.getTop() + mDropDownMenu.getTabView().getHeight()) {
+            if (isvisiable && carlist_top_viewgroup.getVisibility() == View.VISIBLE&&carlist_move_viewgroup.getChildCount()==0) {
                 isvisiable = false;
                 carlist_top_viewgroup.removeAllViews();
                 carlist_top_viewgroup.setVisibility(View.GONE);

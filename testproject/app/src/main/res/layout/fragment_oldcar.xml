@@ -44,8 +44,10 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/reclerview"
             android:layout_width="match_parent"
-
-            android:layout_height="match_parent">
+            android:background="@color/red"
+            app:layout_anchor="@+id/toolbar"
+            app:layout_anchorGravity="bottom"
+            android:layout_height="800dp">
         </android.support.v7.widget.RecyclerView>
 
     </android.support.design.widget.CoordinatorLayout>
