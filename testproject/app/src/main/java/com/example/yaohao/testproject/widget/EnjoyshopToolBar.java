@@ -129,7 +129,9 @@ public class EnjoyshopToolBar extends Toolbar {
     public void setLeftTextVisibility(int i) {
         mLeftText.setVisibility(i);
     }
-
+    public void setLeftTextOnClickListener(OnClickListener li) {
+        mLeftText.setOnClickListener(li);
+    }
     public void setRightButtonText(CharSequence text) {
         mRightButton.setText(text);
         mRightButton.setVisibility(VISIBLE);

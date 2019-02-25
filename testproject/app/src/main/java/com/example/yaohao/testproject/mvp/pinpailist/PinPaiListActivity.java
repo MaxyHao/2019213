@@ -2,9 +2,8 @@ package com.example.yaohao.testproject.mvp.pinpailist;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -13,8 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
-import android.widget.Toast;
-
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import com.example.yaohao.testproject.R;
 import com.example.yaohao.testproject.mvp.shop.ShopFragment;
 import com.example.yaohao.testproject.utils.LocalDataUtils;
@@ -23,12 +22,8 @@ import com.example.yaohao.testproject.widget.sideBar.CharacterParser;
 import com.example.yaohao.testproject.widget.sideBar.PinyinPinPaiComparator;
 import com.example.yaohao.testproject.widget.sideBar.SideBar;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-
 import java.util.ArrayList;
 import java.util.Collections;
-
-import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 public class PinPaiListActivity extends AppCompatActivity implements SectionIndexer {
 
@@ -85,7 +80,7 @@ public class PinPaiListActivity extends AppCompatActivity implements SectionInde
         });
 
     }
-
+    //初始化数据
     private void initData() {
 
         mPinPaiList = filledData(mPinPaiList);
@@ -147,7 +142,7 @@ public class PinPaiListActivity extends AppCompatActivity implements SectionInde
         }
     }
 
-
+    //初始化View
     private void initViews() {
         titleLayout = (LinearLayout) findViewById(R.id.title_layout);
         title = (TextView) findViewById(R.id.title_layout_catalog);

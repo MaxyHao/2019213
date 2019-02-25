@@ -18,7 +18,8 @@ import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import com.example.yaohao.testproject.R;
 import com.example.yaohao.testproject.adapter.GirdDropDownAdapter;
 import com.example.yaohao.testproject.adapter.ListShouFuDropDownAdapter;
@@ -27,28 +28,23 @@ import com.example.yaohao.testproject.bean.MorenPaiXuEntity;
 import com.example.yaohao.testproject.bean.ScrollViewTopEvent;
 import com.example.yaohao.testproject.bean.ShouFuEntity;
 import com.example.yaohao.testproject.bean.YueGongEntity;
+import com.example.yaohao.testproject.citypick.CityPickerActivty;
 import com.example.yaohao.testproject.mvp.base.MvpFragment;
 import com.example.yaohao.testproject.mvp.pinpailist.PinPaiEntity;
 import com.example.yaohao.testproject.mvp.pinpailist.PinPaiListActivity;
 import com.example.yaohao.testproject.retrofit.RxBus;
 import com.example.yaohao.testproject.utils.GpsUtils;
 import com.example.yaohao.testproject.utils.LocalDataUtils;
-import com.example.yaohao.testproject.utils.LogUtils;
 import com.example.yaohao.testproject.widget.DropDownMenu;
 import com.example.yaohao.testproject.widget.EnjoyshopToolBar;
 import com.example.yaohao.testproject.widget.ScrollViewTopXuanFuForListView;
-
-import org.apmem.tools.layouts.FlowLayout;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import butterknife.ButterKnife;
-import butterknife.InjectView;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import org.apmem.tools.layouts.FlowLayout;
 
 /**
  * Created by yaohao on 2019/2/14.
@@ -59,6 +55,7 @@ public class ShopFragment extends MvpFragment<NewCarPresenter> implements Scroll
     private static final String TAG_SHOUFU = "2";
     private static final String TAG_YUEGONG = "3";
     private static final int TAG_PINPAI = 1;
+    private static final int TAG_CITY = TAG_PINPAI+1;
     public static final String TAG_SELECTEDPINPAI = "PinPaiEntity";
     public static final String TAG_PP_POSITION = "PP_position";
     private int mPosition = 0;
@@ -119,6 +116,12 @@ public class ShopFragment extends MvpFragment<NewCarPresenter> implements Scroll
 
             }
         });
+        toolBar.setLeftTextOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                startActivityForResult( new Intent(mContext, CityPickerActivty.class),TAG_CITY);
+            }
+        });
+
         return view;
     }
 
@@ -286,17 +289,15 @@ public class ShopFragment extends MvpFragment<NewCarPresenter> implements Scroll
              isDown = true;
         }
         if (t >= carlist_move_viewgroup.getTop()) {
-            if (!isvisiable && carlist_top_viewgroup.getVisibility() == View.GONE&&carlist_top_viewgroup.getChildCount()==0) {
+            if (!isvisiable &&carlist_top_viewgroup.getChildCount()==0) {
                 isvisiable = true;
                 carlist_move_viewgroup.removeAllViews();
-                carlist_top_viewgroup.setVisibility(View.VISIBLE);
                 carlist_top_viewgroup.addView(mDropDownMenu);
             }
-        } else if (t <= carlist_move_viewgroup.getTop() + mDropDownMenu.getTabView().getHeight()) {
-            if (isvisiable && carlist_top_viewgroup.getVisibility() == View.VISIBLE&&carlist_move_viewgroup.getChildCount()==0) {
+        } else if (t <= carlist_move_viewgroup.getTop()) {
+            if (isvisiable &&carlist_move_viewgroup.getChildCount()==0) {
                 isvisiable = false;
                 carlist_top_viewgroup.removeAllViews();
-                carlist_top_viewgroup.setVisibility(View.GONE);
                 carlist_move_viewgroup.addView(mDropDownMenu);
             }
         }
